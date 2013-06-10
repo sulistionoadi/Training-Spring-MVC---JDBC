@@ -1,0 +1,50 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <h1>Data Customer</h1>
+        <table border="1" cellpadding="2">
+            <thead>
+                <tr>
+                    <th>ID Number</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Birthday</th>
+                    <th>No. Account</th>
+                    <th>Saldo</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                #foreach($customer in $listCustomer)
+                    <tr>
+                        <td>$customer.idNumber</td>
+                        <td>$!customer.firstname</td>
+                        <td>$!customer.lastname</td>
+                        <td>
+                            $!dateTool.format('dd MMMMM yyyy',$customer.birthday)
+                        </td>
+                        <td>$!customer.noAccount</td>
+                        <td align="right">
+                            $!numberTool.format('#,##0.00',$customer.saldo)
+                        </td>
+                        <td align="center">
+                            <a href="form?id=$!customer.idNumber">
+                                edit</a> | 
+                            <a href="delete?id=$!customer.idNumber">
+                                delete</a>
+                        </td>
+                    </tr>
+                #end
+            </tbody>
+        </table>
+    </body>
+</html>

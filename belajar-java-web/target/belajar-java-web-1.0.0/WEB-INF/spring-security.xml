@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2011 ArtiVisi Intermedia <info@artivisi.com>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security.xsd">
+    
+    
+    <http pattern="/css/**" security="none"/>
+    <http pattern="/js/**" security="none"/>
+    
+    <http entry-point-ref="restAuthenticationEntryPoint">
+        <intercept-url pattern="/web/customer/form" access="ROLE_FORM_CUSTOMER" />
+        <intercept-url pattern="/web/customer/list" access="ROLE_LIST_CUSTOMER" />
+        <intercept-url pattern="/json/customer/**" access="ROLE_JSON_CUSTOMER" />
+        
+        <intercept-url pattern="/index.html*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <form-login login-page="/index.html" 
+                    default-target-url="/web/customer/data" 
+                    always-use-default-target="true"/>
+        <logout logout-success-url="/index.html"/>
+        
+        <session-management>
+            <concurrency-control max-sessions="1"/>
+        </session-management>
+    </http>
+    
+    <beans:bean id="restAuthenticationEntryPoint" class="belajar.java.spring.security.RestAuthenticationEntryPoint" />
+    
+    <authentication-manager alias="authenticationManager">
+<!--        <authentication-provider>
+            <user-service>
+                <user name="root" password="admin" authorities="ROLE_USER" />
+            </user-service>
+        </authentication-provider>-->
+        <authentication-provider user-service-ref='myUserDetailsService'>
+            <password-encoder hash="md5">
+                <salt-source user-property="username" />
+            </password-encoder>
+        </authentication-provider>
+    </authentication-manager>
+    
+    <beans:bean id="myUserDetailsService"
+                class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+        <beans:property name="dataSource" ref="dataSource"/>
+        <beans:property name="enableAuthorities" value="false"/>
+        <beans:property name="enableGroups" value="true"/>
+        <beans:property name="usersByUsernameQuery">
+            <beans:value>
+                select USERNAME as username, PASSWORD as password, ACTIVE as active
+                from USER
+                where USERNAME = ?
+            </beans:value>
+        </beans:property>
+        <beans:property name="groupAuthoritiesByUsernameQuery">
+            <beans:value>
+                select r.ID, r.LABEL as group_name, p.LABEL as authority
+                from USER u
+                inner join ROLE r on u.ID_ROLE = r.ID
+                inner join ROLE_PERMISSION rp on rp.ID_ROLE = r.ID
+                inner join PERMISSION p on rp.ID_PERMISSION = p.ID
+                where USERNAME = ?
+            </beans:value>
+        </beans:property>
+    </beans:bean>
+    
+</beans:beans>

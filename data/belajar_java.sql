@@ -1,0 +1,154 @@
+-- MySQL dump 10.13  Distrib 5.5.29, for debian-linux-gnu (i686)
+--
+-- Host: localhost    Database: belajar_java
+-- ------------------------------------------------------
+-- Server version	5.5.29-0ubuntu0.12.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `CUSTOMER`
+--
+
+DROP TABLE IF EXISTS `CUSTOMER`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CUSTOMER` (
+  `ID_NUMBER` varchar(32) NOT NULL,
+  `FIRSTNAME` varchar(50) NOT NULL,
+  `LASTNAME` varchar(50) NOT NULL,
+  `BIRTHDAY` date NOT NULL,
+  `ACCOUNT_NO` varchar(32) NOT NULL,
+  `SALDO` decimal(19,0) DEFAULT NULL,
+  PRIMARY KEY (`ID_NUMBER`),
+  UNIQUE KEY `ACCOUNT_NO` (`ACCOUNT_NO`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `CUSTOMER`
+--
+
+LOCK TABLES `CUSTOMER` WRITE;
+/*!40000 ALTER TABLE `CUSTOMER` DISABLE KEYS */;
+INSERT INTO `CUSTOMER` VALUES (',er4rfsd','EDRY','IRAWAN','1999-02-02','4930',43434),(',fdsfa','FASDF','FASDFAF','1999-01-01','fsadf',300000),('1235555','ENDY','MUHARDIN','1888-12-12','0123456789',1000000),('323','dds','dfsd','1999-01-01','3324',100000),('32323','MELLY','GEBOY','1999-02-02','233289889',100000),('aaaaa','AAAAAA','AAAAAAA','1999-02-02','aaaaaaa',0),('CUST011','ANGGI1','RARA','2013-06-05','00129841',100000),('CUST012','ANGGI2','RARA','2013-06-05','00129842',100000),('CUST013','ANGGI3','RARA','2013-06-05','00129843',100000),('CUST014','ANGGI4','RARA','2013-06-05','00129844',100000),('CUST020','MARTINUS','ADY H','2013-06-05','01010101010',155000),('CUST021','SOLIHIN','YANTO','2013-06-05','0234234243',155000);
+/*!40000 ALTER TABLE `CUSTOMER` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `PERMISSION`
+--
+
+DROP TABLE IF EXISTS `PERMISSION`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PERMISSION` (
+  `ID` varchar(20) NOT NULL,
+  `LABEL` varchar(50) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `PERMISSION`
+--
+
+LOCK TABLES `PERMISSION` WRITE;
+/*!40000 ALTER TABLE `PERMISSION` DISABLE KEYS */;
+INSERT INTO `PERMISSION` VALUES ('1','ROLE_FORM_CUSTOMER'),('2','ROLE_DATA_CUSTOMER'),('3','ROLE_JSON_CUSTOMER');
+/*!40000 ALTER TABLE `PERMISSION` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ROLE`
+--
+
+DROP TABLE IF EXISTS `ROLE`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ROLE` (
+  `ID` varchar(20) NOT NULL,
+  `LABEL` varchar(50) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ROLE`
+--
+
+LOCK TABLES `ROLE` WRITE;
+/*!40000 ALTER TABLE `ROLE` DISABLE KEYS */;
+INSERT INTO `ROLE` VALUES ('1','ADMIN'),('2','USER');
+/*!40000 ALTER TABLE `ROLE` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ROLE_PERMISSION`
+--
+
+DROP TABLE IF EXISTS `ROLE_PERMISSION`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ROLE_PERMISSION` (
+  `ID_ROLE` varchar(20) NOT NULL,
+  `ID_PERMISSION` varchar(20) NOT NULL,
+  PRIMARY KEY (`ID_ROLE`,`ID_PERMISSION`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ROLE_PERMISSION`
+--
+
+LOCK TABLES `ROLE_PERMISSION` WRITE;
+/*!40000 ALTER TABLE `ROLE_PERMISSION` DISABLE KEYS */;
+INSERT INTO `ROLE_PERMISSION` VALUES ('1','1'),('1','2'),('1','3'),('2','2'),('2','3');
+/*!40000 ALTER TABLE `ROLE_PERMISSION` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `USER`
+--
+
+DROP TABLE IF EXISTS `USER`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `USER` (
+  `USERNAME` varchar(25) NOT NULL,
+  `PASSWORD` varchar(50) NOT NULL,
+  `ACTIVE` tinyint(1) NOT NULL DEFAULT '1',
+  `ID_ROLE` varchar(30) NOT NULL,
+  PRIMARY KEY (`USERNAME`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `USER`
+--
+
+LOCK TABLES `USER` WRITE;
+/*!40000 ALTER TABLE `USER` DISABLE KEYS */;
+INSERT INTO `USER` VALUES ('adi','11840f5f7b3fd8f0524b3c41ff3698af',1,'1'),('jimmy','21840ff537a640219e142cd9b52b1944',1,'2');
+/*!40000 ALTER TABLE `USER` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2013-06-10 11:28:26
