@@ -9,12 +9,7 @@
          http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
 
-    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-        <property name="webBindingInitializer">
-            <bean class="belajar.java.binder.DataBindingInitializer" />
-        </property>
-    </bean>
-    
+        
     <context:component-scan base-package="belajar.java.controller" />
 
     <!-- Configures the @Controller programming model -->

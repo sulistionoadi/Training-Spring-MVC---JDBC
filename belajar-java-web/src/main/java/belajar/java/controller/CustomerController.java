@@ -7,20 +7,26 @@ package belajar.java.controller;
 import belajar.java.controller.validator.CustomerValidator;
 import belajar.java.domain.Customer;
 import belajar.java.service.AplikasiService;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.WebRequest;
 
 /**
  *
@@ -33,6 +39,14 @@ public class CustomerController {
             LogFactory.getLog(CustomerController.class);
     @Autowired
     private AplikasiService aplikasiService;
+    
+    @InitBinder
+    public void initBinder(WebDataBinder wdb, WebRequest wr) {
+        SimpleDateFormat formatter = 
+                new SimpleDateFormat("yyyy-MM-dd");
+        wdb.registerCustomEditor(Date.class, 
+                new CustomDateEditor(formatter, true));
+    }
     
     @RequestMapping(value="/customer/form", 
             method= RequestMethod.GET)
@@ -55,13 +69,12 @@ public class CustomerController {
     @RequestMapping(value="/customer/form", 
             method= RequestMethod.POST)
     public String simpanCustomer(
-            @ModelAttribute Customer customer,
+            @ModelAttribute @Valid Customer customer,
             BindingResult bindingResult){
         logger.info("INI CONTROLLER SIMPAN CUSTOMER");
-        new CustomerValidator().validate(customer, bindingResult);
         
         if(bindingResult.hasErrors()){
-            return "redirect:form";
+            return "/customer/form";
         }
 //            customer.setFirstname(customer.getFirstname().toUpperCase());
 //            customer.setLastname(customer.getLastname().toUpperCase());
